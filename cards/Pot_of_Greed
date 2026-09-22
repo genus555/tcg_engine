@@ -1,0 +1,5 @@
+{
+    "name": "Pot_of_Greed",
+    "type": "CardType.SPELL",
+    "func": "print(\"draw 2 here\")"
+}
