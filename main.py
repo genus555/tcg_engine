@@ -1,47 +1,52 @@
-from enum import Enum
-from pathlib import Path
-import json
+import gamelogic as gl
+import gamestate
+import sys
 
-loaded_cards = []
 debug = True
 
-class CardType(Enum):
-    SPELL = 1
-    GATE = 2
-
-
-class Card:
-    def __init__(self, data):
-        self.data = data
-        self.name = self.data["name"]
-        self.type = self.data["type"]
-        self.effect = self.card_json_to_code()
-    def card_json_to_code(self):
-        code = f"""def {self.name}():
-            {self.data["func"]}
-        """
-        effects = {}
-        exec(code, effects)
-        return effects[f"{self.name}"]
-    def debug(self):
-        print(f"Name: {self.name}\nEffect: {self.effect}\nType: {self.type.name}\nFull JSON: {self.data}")
-
-def check_if_loaded(c: Card):
-    if any(x.name == c.name for x in loaded_cards):
+def main():
+    if debug:
+        players = gl.init_debug_players()
+        p1_name = players[0].name
+        p2_name = players[1].name
+        p1_d = players[0].deck
+        p2_d = players[1].deck
+        gl.shuffle_deck(p1_d)
+        gl.shuffle_deck(p2_d)
+        p1 = {}
+        p1["name"] = p1_name
+        p1["deck"] = p1_d
+        p1["hand"] = []
+        p2 = {}
+        p2["name"] = p2_name
+        p2["deck"] = p2_d
+        p2["hand"] = []
+        gs = gamestate.GameState(p1, p2)
+    while True:
+        turn = gs.get_turn_state()
+        if gs.turn_num > 1:
+            gl.draw(turn)
         if debug:
-            print(f"Card \"{c.name}\" is loaded")
-        return True
-    return False
+            show_turn(turn)
+        print(f"{turn["name"]}'s turn.")
+        print(f"{turn["name"]}'s Hand:")
+        gamestate.show_hand(turn["hand"])
+        command = input("> ").lower()
+        command = command.split()
+        match command[0]:
+            case "play":
+                chain = gl.chain(gs, turn, command[1:])
+                print(chain)
+            case "pass" | "p":
+                gs.turn_num += 1
+            case "quit" | "q":
+                sys.exit()
 
-def getCard(name):
-    file = name.replace(" ", "_")
-    file = Path("cards") / file
-    with open(file, "r") as f:
-        card = Card(json.load(f))
-        if not check_if_loaded(card):
-            loaded_cards.append(card)
+def show_turn(turn):
+    print(turn["name"])
+    print(len(turn["deck"]))
+    print(len(turn["hand"]))
 
-getCard("Dust Tornado")
-getCard("Pot of Greed")
-getCard("Dust Tornado")
-getCard("Pot of Greed")
+
+if __name__ == '__main__':
+    main()
