@@ -1,0 +1,5 @@
+{
+    "name": "Scry",
+    "type": "CardType.SPELL",
+    "func": "print(\"view top 2 of deck\")"
+}
