@@ -6,6 +6,8 @@ class GameState:
         self.p1 = p1_state
         self.p2 = p2_state
         self.turn_num = 1
+        self.card_used = False
+        self.drew_for_turn = False
         self.game_start()
 
     def game_start(self):

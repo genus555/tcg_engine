@@ -36,17 +36,19 @@ def draw(ts):
 def play(card, ts):
     hand = ts["hand"]
     for c in hand:
-        if card.lower() == c.name.lower():
+        if card.strip().lower() == c.name.strip().lower():
             hand.remove(c)
             break
     ts["hand"] = hand
 
 def chain(gs, ts, played_card):
     played_card = " ".join(played_card)
-    print(played_card)
     if not c.check_exists(played_card):
         print(f"{played_card} is not a valid card")
-    play(played_card, ts)
+    if gs.p1 == ts:
+        play(played_card, gs.p1)
+    if gs.p2 == ts:
+        play(played_card, gs.p2)
     chain = []
     chain.append(played_card)
     temp_turn = gs.turn_num + 1
@@ -68,6 +70,7 @@ def chain(gs, ts, played_card):
                 check = c.check_exists(card)
                 if check:
                     play(card, cs)
+                    chain.append(card)
                     temp_turn += 1
                 else:
                     print(f"{card} is not a valid card.")
