@@ -25,7 +25,7 @@ def main():
     while True:
         turn = gs.get_turn_state()
         if gs.turn_num > 1:
-            if gs.drew_for_turn:
+            if not gs.drew_for_turn:
                 gl.draw(turn)
                 gs.drew_for_turn = True
         if debug:
@@ -41,12 +41,15 @@ def main():
                     print("Card already used this turn.")
                 else:
                     chain = gl.chain(gs, turn, command[1:])
-                    print(chain)
+                    print(f"played chain: {chain}")
                     gs.card_used = True
             case "pass" | "p":
+                print(f"Before pass: {gs}")
+                print("we were here")
                 gs.turn_num += 1
                 gs.card_used = False
                 gs.drew_for_turn = False
+                print(f"Post pass: {gs}")
             case "quit" | "q":
                 sys.exit()
 

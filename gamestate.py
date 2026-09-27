@@ -21,6 +21,13 @@ class GameState:
         else:
             return self.p2
 
+    def __str__(self):
+        return f"""Player 1: {self.p1}
+Player 2: {self.p2}
+Turn Number: {self.turn_num}
+Card Used: {self.card_used}
+Drew for Turn {self.drew_for_turn}"""
+
 def show_hand(hand):
     hand_names = []
     for card in hand:

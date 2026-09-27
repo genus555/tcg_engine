@@ -15,6 +15,7 @@ class Card:
         self.name = data["name"]
         self.type = data["type"]
         self.effect = self.card_json_to_code(data)
+
     def card_json_to_code(self, data):
         code = f"""def {self.name}():
             {data["func"]}
@@ -22,8 +23,12 @@ class Card:
         effects = {}
         exec(code, effects)
         return effects[f"{self.name}"]
-    def debug(self):
-        print(f"Name: {self.name}\nEffect: {self.effect}\nType: {self.type.name}\nFull JSON: {self.data}")
+
+    def __repr__(self):
+        return f"{self.name}"
+
+    def __str__(self):
+        return f"Name: {self.name}\nEffect: {self.effect}\nType: {self.type.name}\nFull JSON: {self.data}"
 
 def check_if_loaded(c: Card):
     if any(x.name == c.name for x in loaded_cards):
