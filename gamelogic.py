@@ -38,26 +38,41 @@ def play(card, ts):
     for c in hand:
         if card.strip().lower() == c.name.strip().lower():
             hand.remove(c)
-            break
-    ts["hand"] = hand
+            return c
+
+def in_hand(card, ps):
+    for c in ps["hand"]:
+        if card.strip().lower() == c.name.strip().lower():
+            return True
+    return False
 
 def chain(gs, ts, played_card):
+    chain = []
     played_card = " ".join(played_card)
     if not c.check_exists(played_card):
         print(f"{played_card} is not a valid card")
+        return None
+    if not in_hand(played_card, ts):
+        print(f"{played_card} is not in your hand")
+        return None
     if gs.p1 == ts:
         play(played_card, gs.p1)
+        chain.append([played_card, gs.p1, gs.p2])
     if gs.p2 == ts:
         play(played_card, gs.p2)
-    chain = []
-    chain.append(played_card)
+        chain.append([played_card, gs.p2, gs.p1])
     temp_turn = gs.turn_num + 1
     while True:
+        #chain state: state of person who started chain
         cs = {}
+        #opponent state: state of opponent of person who started chain
+        os = {}
         if temp_turn % 2 == 1:
             cs = gs.p1
+            os = gs.p2
         else:
             cs = gs.p2
+            os = gs.p1
         print(f"Current chain: {chain}")
         print(f"{cs["name"]}'s Hand:")
         gamestate.show_hand(cs["hand"])
@@ -68,10 +83,14 @@ def chain(gs, ts, played_card):
                 card = command[1:]
                 card = " ".join(card)
                 check = c.check_exists(card)
+                check2 = in_hand(card, cs)
                 if check:
-                    play(card, cs)
-                    chain.append(card)
-                    temp_turn += 1
+                    if check2:
+                        played = play(card, cs)
+                        chain.append([played, cs, os])
+                        temp_turn += 1
+                    else:
+                        print(f"{card} is not in your hand.")
                 else:
                     print(f"{card} is not a valid card.")
             case "pass" | "p":

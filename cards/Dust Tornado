@@ -1,5 +1,6 @@
 {
-    "name" : "Dust_Tornado",
+    "name" : "Dust Tornado",
+    "func_name": "Dust_Tornado",
     "type" : "CardType.SPELL",
     "func" : "print(\"destroy a spell or trap\")"
 }

@@ -31,6 +31,6 @@ Drew for Turn {self.drew_for_turn}"""
 def show_hand(hand):
     hand_names = []
     for card in hand:
-        card = card.name.replace("_", " ")
+        card = card.name
         hand_names.append(card)
     print(hand_names)

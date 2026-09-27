@@ -1,5 +1,6 @@
 {
     "name": "Nothing",
+    "func_name": "Nothing",
     "type": "CardType.GATE",
     "func": "print(\"nothing was done.\")"
 }

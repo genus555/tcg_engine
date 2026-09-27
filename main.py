@@ -1,3 +1,4 @@
+import cards as c
 import gamelogic as gl
 import gamestate
 import sys
@@ -41,15 +42,13 @@ def main():
                     print("Card already used this turn.")
                 else:
                     chain = gl.chain(gs, turn, command[1:])
-                    print(f"played chain: {chain}")
-                    gs.card_used = True
+                    if chain:
+                        resolve_chain(chain)
+                        gs.card_used = True
             case "pass" | "p":
-                print(f"Before pass: {gs}")
-                print("we were here")
                 gs.turn_num += 1
                 gs.card_used = False
                 gs.drew_for_turn = False
-                print(f"Post pass: {gs}")
             case "quit" | "q":
                 sys.exit()
 
@@ -57,6 +56,11 @@ def show_turn(turn):
     print(turn["name"])
     print(len(turn["deck"]))
     print(len(turn["hand"]))
+
+def resolve_chain(chain):
+    while chain:
+        played = chain.pop()
+        c.resolve(played[0], played[1], played[2], chain)
 
 
 if __name__ == '__main__':

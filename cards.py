@@ -13,16 +13,17 @@ class CardType(Enum):
 class Card:
     def __init__(self, data):
         self.name = data["name"]
+        self.func_name = data["func_name"]
         self.type = data["type"]
         self.effect = self.card_json_to_code(data)
 
     def card_json_to_code(self, data):
-        code = f"""def {self.name}():
+        code = f"""def {self.func_name}(gs):
             {data["func"]}
         """
         effects = {}
         exec(code, effects)
-        return effects[f"{self.name}"]
+        return effects[f"{self.func_name}"]
 
     def __repr__(self):
         return f"{self.name}"
@@ -38,7 +39,7 @@ def check_if_loaded(c: Card):
     return False
 
 def get_card(name):
-    file = name.replace(" ", "_")
+    file = name
     file = Path("cards") / file
     try:
         with open(file, "r") as f:
@@ -54,6 +55,10 @@ def check_exists(name):
     if check == None:
         return False
     return True
+
+def resolve(card: Card, ps, os, chain):
+    #manipulate player state here
+    pass
 
 if debug:
     get_card("Dust Tornado")
