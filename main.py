@@ -25,6 +25,9 @@ def main():
         gs = gamestate.GameState(p1, p2)
     while True:
         turn = gs.get_turn_state()
+        if not turn["deck"]:
+            print(f"The deck is empty, {turn["name"]} wins!")
+            sys.exit()
         if gs.turn_num > 1:
             if not gs.drew_for_turn:
                 gl.draw(turn)
@@ -37,7 +40,7 @@ def main():
         command = input("> ").lower()
         command = command.split()
         match command[0]:
-            case "play":
+            case "play" | "pl":
                 if gs.card_used:
                     print("Card already used this turn.")
                 else:
@@ -45,10 +48,19 @@ def main():
                     if chain:
                         resolve_chain(chain)
                         gs.card_used = True
+            case "describe" | "d":
+                card = " ".join(command[1:])
+                if not c.check_exists(card):
+                    print(f"{card} is not a valid card")
+                else:
+                    card_obj = c.get_card(card)
+                    print(f"{card_obj.name}: {card_obj.description}")
             case "pass" | "p":
                 gs.turn_num += 1
                 gs.card_used = False
                 gs.drew_for_turn = False
+            case "help" | "h":
+                help()
             case "quit" | "q":
                 sys.exit()
 
@@ -61,6 +73,14 @@ def resolve_chain(chain):
     while chain:
         played = chain.pop()
         c.resolve(played[0], played[1], played[2], chain)
+
+def help():
+    print("Commands:")
+    print("play(pl) [card_name]: play the card")
+    print("describe(d) [card_name]: describe what the card does")
+    print("pass(p): pass your turn")
+    print("quit(q): force quit game")
+    print("The () next to commands show shortcuts.")
 
 
 if __name__ == '__main__':

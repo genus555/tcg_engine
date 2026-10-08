@@ -2,6 +2,7 @@ import player as p
 import cards as c
 import gamestate
 import random
+import sys
 
 debug = False
 
@@ -27,6 +28,9 @@ def shuffle_deck(deck):
 def draw(ts):
     deck = ts["deck"]
     hand = ts["hand"]
+    if not deck:
+        print(f"The deck is empty, {ts["name"]} wins!")
+        sys.exit()
     drawn_card = deck.pop()
     hand.append(drawn_card)
     ts["deck"] = deck
@@ -38,7 +42,7 @@ def play(card, ts):
     for c in hand:
         if card.strip().lower() == c.name.strip().lower():
             hand.remove(c)
-            return c
+            return
 
 def in_hand(card, ps):
     for c in ps["hand"]:
@@ -79,20 +83,27 @@ def chain(gs, ts, played_card):
         command = input("> ").lower()
         command = command.split()
         match command[0]:
-            case "play":
+            case "play" | "pl":
                 card = command[1:]
                 card = " ".join(card)
                 check = c.check_exists(card)
                 check2 = in_hand(card, cs)
                 if check:
                     if check2:
-                        played = play(card, cs)
+                        play(card, cs)
                         chain.append([card, cs, os])
                         temp_turn += 1
                     else:
                         print(f"{card} is not in your hand.")
                 else:
                     print(f"{card} is not a valid card.")
+            case "describe" | "d":
+                card = " ".join(command[1:])
+                if not c.check_exists(card):
+                    print(f"{card} is not a valid card")
+                else:
+                    card_obj = c.get_card(card)
+                    print(f"{card_obj.name}: {card_obj.description}")
             case "pass" | "p":
                 return chain
 
