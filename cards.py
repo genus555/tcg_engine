@@ -61,13 +61,21 @@ def check_exists(name):
         return False
     return True
 
+def check_and_remove_from_deck(card_name, ps):
+    if check_exists(card_name):
+        deck = ps["deck"]
+        for c in deck:
+            if card_name.strip().lower() == c.name.strip().lower():
+                deck.remove(c)
+                gl.shuffle_deck(ps["deck"])
+                return True
+    return False
+
 def resolve(card_name, ps, os, chain):
     ordered_chain = chain[::-1]
     card = get_card(card_name)
     card.effect(ps, os, chain, ordered_chain)
 
 if debug:
-    get_card("Dust Tornado")
-    get_card("Pot of Greed")
-    get_card("Dust Tornado")
+    get_card("Trash Card")
     get_card("Pot of Greed")

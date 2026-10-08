@@ -1,6 +1,8 @@
 import cards as c
 import gamelogic as gl
 import gamestate
+
+import time
 import sys
 
 debug = True
@@ -16,22 +18,24 @@ def main():
         gl.shuffle_deck(p2_d)
         p1 = {}
         p1["name"] = p1_name
-        p1["deck"] = p1_d
+        p1["og_deck"] = p1_d.copy()
+        p1["deck"] = p1_d.copy()
         p1["hand"] = []
         p2 = {}
         p2["name"] = p2_name
-        p2["deck"] = p2_d
+        p2["og_deck"] = p2_d.copy()
+        p2["deck"] = p2_d.copy()
         p2["hand"] = []
         gs = gamestate.GameState(p1, p2)
     while True:
         turn = gs.get_turn_state()
-        if not turn["deck"]:
-            print(f"The deck is empty, {turn["name"]} wins!")
-            sys.exit()
         if gs.turn_num > 1:
             if not gs.drew_for_turn:
                 gl.draw(turn)
                 gs.drew_for_turn = True
+        if not turn["deck"]:
+                    print(f"The deck is empty, {turn["name"]} wins!")
+                    sys.exit()
         if debug:
             show_turn(turn)
         print(f"{turn["name"]}'s turn.")
@@ -73,6 +77,8 @@ def resolve_chain(chain):
     while chain:
         played = chain.pop()
         c.resolve(played[0], played[1], played[2], chain)
+        print(f"Current chain: {[card[0] for card in chain]}")
+        time.sleep(3)
 
 def help():
     print("Commands:")
