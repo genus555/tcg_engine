@@ -2,5 +2,9 @@
     "name": "Pot of Greed",
     "func_name": "Pot_of_Greed",
     "type": "CardType.SPELL",
-    "func": "print(\"draw 2 here\")"
+    "description": "Draw 2 cards.",
+    "func": [
+        "gl.draw(ps)",
+        "gl.draw(ps)"
+    ]
 }

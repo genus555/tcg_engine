@@ -2,5 +2,12 @@
     "name": "Nothing",
     "func_name": "Nothing",
     "type": "CardType.GATE",
-    "func": "print(\"nothing was done.\")"
+    "description": "Negate the most recently used card. If there is nothing to negate, do thing.",
+    "func": [
+        "if len(chain) <= 0:",
+        "    print('Nothing did nothing....')",
+        "else:",
+        "    card = chain.pop()",
+        "    print(f'{card[0].capitalize()} was negated.')"
+    ]
 }

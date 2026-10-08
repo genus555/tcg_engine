@@ -1,6 +1,8 @@
 from enum import Enum
 from pathlib import Path
+import gamelogic as gl
 import json
+import textwrap
 
 loaded_cards = []
 debug = False
@@ -15,13 +17,16 @@ class Card:
         self.name = data["name"]
         self.func_name = data["func_name"]
         self.type = data["type"]
+        self.description = data["description"]
         self.effect = self.card_json_to_code(data)
 
     def card_json_to_code(self, data):
+        func = "\n".join(data["func"])
+        func = textwrap.indent(func, "    ")
         code = f"""def {self.func_name}(ps, os, chain, ordered_chain):
-            {data["func"]}
+{func}
         """
-        effects = {}
+        effects = globals().copy()
         exec(code, effects)
         return effects[f"{self.func_name}"]
 

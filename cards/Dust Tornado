@@ -2,5 +2,24 @@
     "name" : "Dust Tornado",
     "func_name": "Dust_Tornado",
     "type" : "CardType.SPELL",
-    "func" : "print(\"destroy a spell or trap\")"
+    "description" : "Choose a card from your opponent's hand to discard.",
+    "func" : [
+        "hand_size = len(os[\"hand\"])",
+        "if hand_size <= 0:",
+        "    print('No cards in opponent\\'s hand to remove.')",
+        "    return",
+        "while True:",
+        "    print(f'Choose a number between 1-{hand_size}')",
+        "    command = input('> ')",
+        "    try:",
+        "        command = int(command)",
+        "        if command > 0 and command <= hand_size:",
+        "            discarded = os[\"hand\"].pop(command-1)",
+        "            print(f'{os[\"name\"]}\\'s {discarded.name} was discarded')",
+        "            return",
+        "        else:",
+        "            print(f'{command} is not between 1-{hand_size}')",
+        "    except ValueError:",
+        "        print(f'{command} is not a valid number')"
+    ]
 }
