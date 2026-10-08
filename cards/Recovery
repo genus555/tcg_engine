@@ -1,0 +1,22 @@
+{
+    "name" : "Recovery",
+    "func_name" : "Recovery",
+    "type" : "CardType.SPELL",
+    "description" : "Choose a card you've used to add back to deck. (Except Recovery)",
+    "func" : [
+        "used_cards = gl.find_used_cards(ps)",
+        "for card in used_cards.copy():",
+        "    if card.name.lower() == \"recovery\":",
+        "        used_cards.remove(card)",
+        "while True:",
+        "    print(f'{ps[\"name\"]}, choose a used card to add back to deck.')",
+        "    print('Used cards:', [card.name for card in used_cards])",
+        "    c = input('> ')",
+        "    if any(c.strip().lower() == card.name.strip().lower() for card in used_cards):",
+        "        ps[\"deck\"].append(get_card(c))",
+        "        gl.shuffle_deck(ps[\"deck\"])",
+        "        return",
+        "    else:",
+        "        print(f'{c} is not a card you\\'ve used.')"
+    ]
+}

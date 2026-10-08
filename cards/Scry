@@ -5,6 +5,6 @@
     "description": "Shows you the top 2 cards in your deck.",
     "func": [
         "top_of_deck = ps[\"deck\"][-2:][::-1]",
-        "print(f'Your next 2 cards: {top_of_deck}')"
+        "print(f'{ps[\"name\"]}\\'s next 2 cards: {top_of_deck}')"
     ]
 }

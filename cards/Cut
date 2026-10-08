@@ -1,0 +1,30 @@
+{
+    "name" : "Cut",
+    "func_name" : "Cut",
+    "type" : "CardType.SPELL",
+    "description" : "Choose a number of cards to discard from hand, then remove that many cards from your deck.",
+    "func" : [
+        "hand_size = len(ps[\"hand\"])",
+        "if hand_size <= 0:",
+        "    print('You don\\'t have any cards to discard.')",
+        "    return",
+        "while True:",
+        "    print(f'{ps[\"name\"]}, choose an amount of cards to discard. Hand Size: {hand_size}')",
+        "    num = input('> ')",
+        "    try:",
+        "        num = int(num)",
+        "        if num >= 0 and num <= hand_size:",
+        "            for i in range(num):",
+        "                gl.discard_from_hand(ps)",
+        "            for i in range(num):",
+        "                ps[\"deck\"].pop()",
+        "                if len(ps[\"deck\"]) == 0:",
+        "                    print(f'{ps[\"name\"]}\\'s deck is empty. {ps[\"name\"]} wins!')",
+        "                    gl.end_game()",
+        "            return",
+        "        else:",
+        "            print(f'{num} is not between 0-{hand_size}')",
+        "    except ValueError:",
+        "        print(f'{num} is not a valid number')"
+    ]
+}

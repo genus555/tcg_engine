@@ -1,0 +1,17 @@
+{
+    "name" : "A Brick",
+    "func_name" : "A_Brick",
+    "type" : "CardType.SPELL",
+    "description" : "It's a brick.",
+    "func" : [
+        "num = gl.select_rand_num(5)",
+        "brick_list = []",
+        "brick_list.append('A brick...')",
+        "brick_list.append('Throw me at someone.')",
+        "brick_list.append('Feels a bit wet.')",
+        "brick_list.append('Smeels a little metallic.')",
+        "brick_list.append('...')",
+        "brick_list.append('Hope your hand isn\\'t full of me.')",
+        "print(brick_list[num])"
+    ]
+}

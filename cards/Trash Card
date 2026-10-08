@@ -1,6 +1,6 @@
 {
-    "name" : "Dust Tornado",
-    "func_name": "Dust_Tornado",
+    "name" : "Trash Card",
+    "func_name": "Trash_Card",
     "type" : "CardType.SPELL",
     "description" : "Choose a card from your opponent's hand to discard.",
     "func" : [
@@ -9,7 +9,7 @@
         "    print('No cards in opponent\\'s hand to remove.')",
         "    return",
         "while True:",
-        "    print(f'Choose a number between 1-{hand_size}')",
+        "    print(f'{ps[\"name\"]}, choose a number between 1-{hand_size}')",
         "    command = input('> ')",
         "    try:",
         "        command = int(command)",

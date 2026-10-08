@@ -1,0 +1,19 @@
+{
+    "name" : "Cheeky Gnab",
+    "func_name": "Cheeky_Gnab",
+    "type" : "CardType.SPELL",
+    "description" : "Choose a card from your deck to add to your hand.",
+    "func" : [
+        "while True:",
+        "    print(f'{ps[\"name\"]}, choose a card from your deck:')",
+        "    print([card.name for card in ps[\"deck\"]])",
+        "    command = input('> ')",
+        "    check = check_and_remove_from_deck(command, ps)",
+        "    if check:",
+        "        card = get_card(command)",
+        "        gl.add_to_hand(card, ps)",
+        "        return",
+        "    else:",
+        "        print(f'{command} is not a card in your deck.')"
+    ]
+}

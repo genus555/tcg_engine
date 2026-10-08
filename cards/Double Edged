@@ -1,0 +1,15 @@
+{
+    "name" : "Double Edged",
+    "func_name": "Double_Edged",
+    "type" : "CardType.SPELL",
+    "description" : "Remove 1 random card from your opponent's deck.",
+    "func" : [
+        "opponent_deck_length = len(os[\"deck\"])",
+        "if opponent_deck_length <= 1:",
+        "    print(f'{os[\"name\"]}\\'s deck is empty. {os[\"name\"]} wins!')",
+        "    gl.end_game()",
+        "rand_index = gl.select_rand_num(opponent_deck_length - 1)",
+        "card = os[\"deck\"].pop(rand_index)",
+        "print(f'{os[\"name\"]}\\'s {card.name} has been removed from deck.')"
+    ]
+}

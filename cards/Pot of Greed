@@ -4,6 +4,7 @@
     "type": "CardType.SPELL",
     "description": "Draw 2 cards.",
     "func": [
+        "print(f'{ps[\"name\"]} drew 2 cards.')",
         "gl.draw(ps)",
         "gl.draw(ps)"
     ]

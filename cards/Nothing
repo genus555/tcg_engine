@@ -8,6 +8,6 @@
         "    print('Nothing did nothing....')",
         "else:",
         "    card = chain.pop()",
-        "    print(f'{card[0].capitalize()} was negated.')"
+        "    print(f'{card[1][\"name\"]}\\'s {card[0].capitalize()} was negated.')"
     ]
 }

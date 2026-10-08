@@ -1,0 +1,11 @@
+{
+    "name" : "Flub You",
+    "func_name" : "Flub_You",
+    "type" : "CardType.SPELL",
+    "description" : "Move the top card in your opponent's deck to the bottom.",
+    "func" : [
+        "top_card = os[\"deck\"].pop()",
+        "os[\"deck\"].insert(0, top_card)",
+        "print(f'{os[\"name\"]}\\'s top card was moved to the bottom of the deck.')"
+    ]
+}
