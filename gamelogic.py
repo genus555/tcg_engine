@@ -73,7 +73,7 @@ def chain(gs, ts, played_card):
         else:
             cs = gs.p2
             os = gs.p1
-        print(f"Current chain: {chain}")
+        print(f"Current chain:", [card[0] for card in chain])
         print(f"{cs["name"]}'s Hand:")
         gamestate.show_hand(cs["hand"])
         command = input("> ").lower()
@@ -87,7 +87,7 @@ def chain(gs, ts, played_card):
                 if check:
                     if check2:
                         played = play(card, cs)
-                        chain.append([played, cs, os])
+                        chain.append([card, cs, os])
                         temp_turn += 1
                     else:
                         print(f"{card} is not in your hand.")

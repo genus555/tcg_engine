@@ -18,7 +18,7 @@ class Card:
         self.effect = self.card_json_to_code(data)
 
     def card_json_to_code(self, data):
-        code = f"""def {self.func_name}(gs):
+        code = f"""def {self.func_name}(ps, os, chain, ordered_chain):
             {data["func"]}
         """
         effects = {}
@@ -56,9 +56,10 @@ def check_exists(name):
         return False
     return True
 
-def resolve(card: Card, ps, os, chain):
-    #manipulate player state here
-    pass
+def resolve(card_name, ps, os, chain):
+    ordered_chain = chain[::-1]
+    card = get_card(card_name)
+    card.effect(ps, os, chain, ordered_chain)
 
 if debug:
     get_card("Dust Tornado")
