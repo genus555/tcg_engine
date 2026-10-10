@@ -25,7 +25,7 @@ def main():
         p2["og_deck"] = p2_d.copy()
         p2["deck"] = p2_d.copy()
         p2["hand"] = []
-        gs = gamestate.GameState(p1, p2)
+    gs = gamestate.GameState(p1, p2)
     print("Type help for a list of available commands")
     while True:
         turn = gs.get_turn_state()

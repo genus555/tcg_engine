@@ -223,6 +223,10 @@ def get_card_input(ps, seek_type):
         used_pile = find_used_cards(ps)
     while True:
         print(f'Pick a card from {ps["name"]}\'s {seek_type}.')
+        if seek_type == SeekType.USED_PILE:
+            print([card.name for card in used_pile])
+        else:
+            print([card.name for card in ps[seek_type]])
         card_name = input('> ')
         if c.check_exists(card_name):
             match seek_type:
