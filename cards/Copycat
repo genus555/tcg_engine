@@ -1,0 +1,13 @@
+{
+    "name" : "Copycat",
+    "func_name" : "Copycat",
+    "type" : "CardType.SPELL",
+    "description" : "Copies the effect of the most recently used card.",
+    "func" : [
+        "if len(chain) <= 0:",
+        "    print('There are no cards to copy.')",
+        "    return",
+        "next_card_name = chain[-1][0]",
+        "resolve(next_card_name, ps, os, chain)"
+    ]
+}
