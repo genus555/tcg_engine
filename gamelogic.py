@@ -1,3 +1,4 @@
+from enum import StrEnum
 import player as p
 import cards as c
 import gamestate
@@ -5,6 +6,11 @@ import random
 import sys
 
 debug = False
+
+class SeekType(StrEnum):
+    HAND = 'hand'
+    DECK = 'deck'
+    USED_PILE = 'used pile'
 
 def init_debug_players():
     deck1 = []
@@ -20,8 +26,6 @@ def init_debug_players():
         deck2.append("Scry")
         deck1.append("Cheeky Gnab")
         deck2.append("Cheeky Gnab")
-        deck1.append("Trickery")
-        deck2.append("Trickery")
         deck1.append("Cut")
         deck2.append("Cut")
         deck1.append("Flub You")
@@ -30,6 +34,10 @@ def init_debug_players():
         deck2.append("Double Edged")
         deck1.append("Recovery")
         deck2.append("Recovery")
+    deck1.append("Trickery")
+    deck2.append("Trickery")
+    deck1.append("Copycat")
+    deck2.append("Copycat")
     for i in range(10):
         deck1.append("A Brick")
         deck2.append("A Brick")
@@ -51,6 +59,10 @@ def find_used_cards(ps):
             used_cards.remove(card)
     return used_cards
 
+def print_used_cards(ps):
+    used = find_used_cards(ps)
+    print([card.name for card in used])
+
 def add_to_hand(card_obj, ps):
     ps["hand"].append(card_obj)
 
@@ -70,6 +82,14 @@ def discard_from_hand(ps):
 
 def end_game():
     sys.exit()
+
+def help():
+    print("Commands:")
+    print("play(pl) [card_name]: play the card")
+    print("describe(d) [card_name]: describe what the card does")
+    print("used(u): print a list of cards you've used.")
+    print("pass(p): pass your turn")
+    print("The () next to commands show shortcuts.")
 
 def draw(ts):
     deck = ts["deck"]
@@ -92,6 +112,18 @@ def play(card, ts):
 
 def in_hand(card, ps):
     for c in ps["hand"]:
+        if card.strip().lower() == c.name.strip().lower():
+            return True
+    return False
+
+def in_deck(card, ps):
+    for c in ps["deck"]:
+        if card.strip().lower() == c.name.strip().lower():
+            return True
+    return False
+
+def in_used_pile(card, used_pile):
+    for c in used_pile:
         if card.strip().lower() == c.name.strip().lower():
             return True
     return False
@@ -127,6 +159,8 @@ def chain(gs, ts, played_card):
         print(f"{cs["name"]}'s Hand:")
         gamestate.show_hand(cs["hand"])
         command = input("> ").lower()
+        if not command.strip():
+            continue
         command = command.split()
         match command[0]:
             case "play" | "pl":
@@ -150,8 +184,68 @@ def chain(gs, ts, played_card):
                 else:
                     card_obj = c.get_card(card)
                     print(f"{card_obj.name}: {card_obj.description}")
+            case "used" | "u":
+                print_used_cards(cs)
             case "pass" | "p":
                 return chain
+            case "help" | "h":
+                help()
+            case "quit" | "q":
+                end_game()
+            case _:
+                print(f'{command[0]} is not a recognized command. Type \'help\' for a list of commands.')
+
+def get_int_input(min=None, max=None):
+    range_exists = min is not None and max is not None
+    while True:
+        if range_exists:
+            if max < min:
+                print(f'There is a bug with this card. Please report it.')
+                return
+            print(f'Enter a number between {min} and {max}')
+        else:
+            print('Enter a number')
+        num = input('> ')
+        try:
+            num = int(num)
+            if range_exists:
+                if num >= min and num <= max:
+                    return num
+                else:
+                    print(f'{num} is not in range')
+            else:
+                return num
+        except ValueError:
+            print(f'{num} is not a valid number')
+
+def get_card_input(ps, seek_type):
+    if seek_type == SeekType.USED_PILE:
+        used_pile = find_used_cards(ps)
+    while True:
+        print(f'Pick a card from {ps["name"]}\'s {seek_type}.')
+        card_name = input('> ')
+        if c.check_exists(card_name):
+            match seek_type:
+                case SeekType.USED_PILE:
+                    if in_used_pile(card_name, used_pile):
+                        return card_name
+                    else:
+                        print(f'{card_name} is not in your used pile.')
+                case SeekType.HAND:
+                    if in_hand(card_name, ps):
+                        return card_name
+                    else:
+                        print(f'{card_name} is not in your hand.')
+                case SeekType.DECK:
+                    if in_deck(card_name, ps):
+                        return card_name
+                    else:
+                        print(f'{card_name} is not in your deck.')
+                case _:
+                    print('There is a bug with this card. Please report it.')
+                    return
+        else:
+            print(f'{card_name} does not exist')
 
 if debug:
     players = init_debug_players()

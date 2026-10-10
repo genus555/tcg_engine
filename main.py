@@ -3,7 +3,6 @@ import gamelogic as gl
 import gamestate
 
 import time
-import sys
 
 debug = True
 
@@ -27,6 +26,7 @@ def main():
         p2["deck"] = p2_d.copy()
         p2["hand"] = []
         gs = gamestate.GameState(p1, p2)
+    print("Type help for a list of available commands")
     while True:
         turn = gs.get_turn_state()
         if gs.turn_num > 1:
@@ -42,6 +42,8 @@ def main():
         print(f"{turn["name"]}'s Hand:")
         gamestate.show_hand(turn["hand"])
         command = input("> ").lower()
+        if not command.strip():
+            continue
         command = command.split()
         match command[0]:
             case "play" | "pl":
@@ -59,14 +61,18 @@ def main():
                 else:
                     card_obj = c.get_card(card)
                     print(f"{card_obj.name}: {card_obj.description}")
+            case "used" | "u":
+                gl.print_used_cards(gs.get_turn_state())
             case "pass" | "p":
                 gs.turn_num += 1
                 gs.card_used = False
                 gs.drew_for_turn = False
             case "help" | "h":
-                help()
+                gl.help()
             case "quit" | "q":
-                sys.exit()
+                gl.end_game()
+            case _:
+                print(f'{command[0]} is not a recognized command. Type \'help\' for a list of commands.')
 
 def show_turn(turn):
     print(turn["name"])
@@ -79,14 +85,6 @@ def resolve_chain(chain):
         c.resolve(played[0], played[1], played[2], chain)
         print(f"Current chain: {[card[0] for card in chain]}")
         time.sleep(3)
-
-def help():
-    print("Commands:")
-    print("play(pl) [card_name]: play the card")
-    print("describe(d) [card_name]: describe what the card does")
-    print("pass(p): pass your turn")
-    print("quit(q): force quit game")
-    print("The () next to commands show shortcuts.")
 
 
 if __name__ == '__main__':
