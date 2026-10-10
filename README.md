@@ -123,4 +123,36 @@ Prompts the Player to input a number in an optional inclusive range. Both `min` 
 ### get_card_input(ps, seek_type)  
 Prompts the Player to choose a card from a location based on the SeekType StrEnum `seek_type`. Ensures the player chooses a valid card that exists at that location. Returns the name of the card.  
   
-# TODO: Document Cards.py
+## Cards.py  
+  
+### loaded_cards  
+A list of Card objects. A global variable used to keep track of which cards have already been loaded into the game.
+  
+### class CardType(enum)  
+Enum to store the card type. (For example monster, trap, spell, in Yu-Gi-Oh) Currently not used in TCG_Engine, moreso there for any cards that need to know a card's type.  
+  
+### class Card  
+Turns a card stored in JSON and turns it into a card object.  
+![Card contains:](images/cards_init.PNG)  
+Card.name needs to be `Capitalized With Regular Spaces` while func_name needs to be in `Upper_Camel_Snake_Case`  
+Card.type stores `CardType` and Card.description is a description of what the card will do for the Player to read.  
+  
+#### Cards.card_json_to_code(self, data)  
+Takes JSON data `data` and converts it into Python code for Card.effect  
+The function signature created by card_json_to_code: `def {Card.func_name}(ps, os, chain, ordered_chain)`  
+Note: ordered_chain is chain but reveresed to be more understandable. Also code generated will be code inside Cards.py so use imports accordingly.  
+  
+### check_if_loaded(c: Card)  
+Checks to see if the card object `c` is already in `loaded_cards` or not. Returns True or False  
+  
+### get_card(name)  
+Takes the card's name `name` and searches the cards folder to see if a file with the same name exists. If it does, it'll open the file and create a Card object based on the JSON data. get_card will also add the Card object to `loaded_cards` if it isn't already in there. If the file is not found, get_card() will return None. Otherwise, it will return the Card object.  
+  
+### check_exists(name)  
+Functions the same as check_if_loaded() but checks for the Cards file itself rather than if it's loaded. Takes a card's name `name` instead of an object. Will return True of False accordingly.  
+  
+### check_and_remove_from_deck(card_name, ps)  
+Takes card's name `card_name` and checks if the card exists. Then it checks if the card is in the Player's deck `ps["deck"]` from Player state `ps`. If either check fails the function will return False. If both checks pass, the function will remove the card from `ps["deck"]` and then return True.  
+  
+### resolve(card_name, ps, os, chain)  
+Turns a card's name `card_name` into a Card object. Then passes Player State `ps`, Opponent State `os`, `chain`, and chain reversed to be more readable `ordered_chain` to the Card object's `Card.effect`.
